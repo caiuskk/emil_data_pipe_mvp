@@ -13,7 +13,12 @@ source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## 2. Mvp run
+## 2. Set up config
+
+make a copy of .env.exmaple and save as .env
+fill in required keys in the .env, which requires your own registration from ERCOT
+
+## 3. Mvp run
 
 ```bash
 python -m tests.test_token # test if your keys ready

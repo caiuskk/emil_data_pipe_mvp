@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
         default=1000,
         help="Page size (default: 1000)",
     )
-    # 可以再加一些可选 filter，例如 hourEnding / MWOffered 等
+    # Optional filters like hourEnding / MWOffered
     p.add_argument("--hour-from", type=int)
     p.add_argument("--hour-to", type=int)
 

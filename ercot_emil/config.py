@@ -7,7 +7,7 @@ env_path = find_dotenv()
 if env_path:
     load_dotenv(env_path)
 else:
-    # 保险起见，再手动指定：项目根目录的 .env
+    # To be safe, also load project root .env
     root = Path(__file__).resolve().parents[1]  # .../emil_data_pipe_mvp
     load_dotenv(root / ".env")
 

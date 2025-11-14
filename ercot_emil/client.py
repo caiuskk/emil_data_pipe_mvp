@@ -21,8 +21,8 @@ def get_report_json(
     path: str, params: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
-    调用 JSON 报表 endpoint。
-    path 形如: "/public-reports/np3-911-er/2d_agg_as_offers_ecrsm"
+    Call the JSON report endpoint.
+    Path looks like: "/public-reports/np3-911-er/2d_agg_as_offers_ecrsm"
     """
     url = f"{config.BASE_URL}{path}"  # BASE_URL = "https://api.ercot.com/api"
     resp = requests.get(url, headers=_headers(), params=params or {}, timeout=60)
@@ -32,7 +32,7 @@ def get_report_json(
 
 def get_report_df(path: str, params: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
     """
-    直接返回 DataFrame。
+    Return a DataFrame directly.
     """
     payload = get_report_json(path, params=params)
     return emil_json_to_df(payload)

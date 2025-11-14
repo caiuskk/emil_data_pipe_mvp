@@ -23,8 +23,8 @@ def get_np3_agg_as_offers_ecrsm(
     direction: Optional[str] = None,
 ) -> pd.DataFrame:
     """
-    NP3-911-ER / 2d_agg_as_offers_ecrsm 报表。
-    文档参数：ECRSMOfferPriceFrom/To, deliveryDateFrom/To, hourEndingFrom/To, MWOfferedFrom/To, page, size, sort, dir
+    NP3-911-ER / 2d_agg_as_offers_ecrsm report.
+    Docs params: ECRSMOfferPriceFrom/To, deliveryDateFrom/To, hourEndingFrom/To, MWOfferedFrom/To, page, size, sort, dir
     """
 
     if delivery_date_to is None:
@@ -35,7 +35,7 @@ def get_np3_agg_as_offers_ecrsm(
         "deliveryDateTo": delivery_date_to.strftime("%Y-%m-%d"),
     }
 
-    # 只有用户传的才塞进 params
+    # Only add params the user passed in
     if ecrsm_offer_price_from is not None:
         params["ECRSMOfferPriceFrom"] = ecrsm_offer_price_from
     if ecrsm_offer_price_to is not None:

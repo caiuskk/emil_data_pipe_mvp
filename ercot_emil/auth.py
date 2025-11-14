@@ -37,7 +37,7 @@ def get_id_token(dbg=False) -> str:
     if dbg:
         print("DEBUG – status:", resp.status_code)
         print("DEBUG – raw response text:")
-        print(resp.text[:1000])  # 先只看前 1000 字
+        print(resp.text[:1000])  # Only look at the first 1000 chars
 
     resp.raise_for_status()
     data = resp.json()

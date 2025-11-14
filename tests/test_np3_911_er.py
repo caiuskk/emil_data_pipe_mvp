@@ -9,22 +9,22 @@ def emil_json_to_df(j: dict) -> pd.DataFrame:
     data = j.get("data")
     fields = j.get("fields")
 
-    # 1. 如果 data 是空，直接返回空 DF
+    # 1. If data is empty, return empty DF
     if not data:
         return pd.DataFrame()
 
-    # 2. 判断 data 是 list of lists（无列名）
+    # 2. Check if data is a list of lists (no column names)
     if isinstance(data, list) and len(data) > 0 and isinstance(data[0], list):
-        # 提取列名
+        # Get column names
         colnames = [f["name"] for f in fields]
         df = pd.DataFrame(data, columns=colnames)
         return df
 
-    # 3. 如果是 list of dict
+    # 3. If it's a list of dicts
     if isinstance(data, list) and isinstance(data[0], dict):
         return pd.DataFrame.from_records(data)
 
-    # 4. 兜底
+    # 4. Fallback
     return pd.DataFrame()
 
 

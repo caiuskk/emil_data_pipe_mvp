@@ -1,19 +1,63 @@
-# api.py
-from .client import download_artifact_by_emil
-from .parse import bytes_to_dataframe
+# ercot_emil/api.py
+from __future__ import annotations
+
+from datetime import date
+from typing import Optional
 import pandas as pd
 
+from .client import get_report_df
 
-def get_emil_dataset(
-    emil_id: str,
-    params: dict | None = None,
-    file_type: str | None = None,
+
+def get_np3_agg_as_offers_ecrsm(
+    delivery_date_from: date,
+    delivery_date_to: Optional[date] = None,
+    ecrsm_offer_price_from: Optional[float] = None,
+    ecrsm_offer_price_to: Optional[float] = None,
+    hour_ending_from: Optional[int] = None,
+    hour_ending_to: Optional[int] = None,
+    mw_offered_from: Optional[float] = None,
+    mw_offered_to: Optional[float] = None,
+    page: Optional[int] = None,
+    size: Optional[int] = 1000,
+    sort: Optional[str] = None,
+    direction: Optional[str] = None,
 ) -> pd.DataFrame:
-    raw = download_artifact_by_emil(emil_id, params=params)
-    df = bytes_to_dataframe(raw, file_type=file_type)
-    return df
+    """
+    NP3-911-ER / 2d_agg_as_offers_ecrsm 报表。
+    文档参数：ECRSMOfferPriceFrom/To, deliveryDateFrom/To, hourEndingFrom/To, MWOfferedFrom/To, page, size, sort, dir
+    """
 
+    if delivery_date_to is None:
+        delivery_date_to = delivery_date_from
 
-def get_np3_911_er_latest() -> pd.DataFrame:
-    # 不指定 file_type，交给 bytes_to_dataframe 自动判断
-    return get_emil_dataset("NP3-911-ER")
+    params = {
+        "deliveryDateFrom": delivery_date_from.strftime("%Y-%m-%d"),
+        "deliveryDateTo": delivery_date_to.strftime("%Y-%m-%d"),
+    }
+
+    # 只有用户传的才塞进 params
+    if ecrsm_offer_price_from is not None:
+        params["ECRSMOfferPriceFrom"] = ecrsm_offer_price_from
+    if ecrsm_offer_price_to is not None:
+        params["ECRSMOfferPriceTo"] = ecrsm_offer_price_to
+    if hour_ending_from is not None:
+        params["hourEndingFrom"] = hour_ending_from
+    if hour_ending_to is not None:
+        params["hourEndingTo"] = hour_ending_to
+    if mw_offered_from is not None:
+        params["MWOfferedFrom"] = mw_offered_from
+    if mw_offered_to is not None:
+        params["MWOfferedTo"] = mw_offered_to
+    if page is not None:
+        params["page"] = page
+    if size is not None:
+        params["size"] = size
+    if sort is not None:
+        params["sort"] = sort
+    if direction is not None:
+        params["dir"] = direction
+
+    return get_report_df(
+        "/public-reports/np3-911-er/2d_agg_as_offers_ecrsm",
+        params=params,
+    )

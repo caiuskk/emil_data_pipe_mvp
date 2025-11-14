@@ -1,54 +1,38 @@
 # ercot_emil/client.py
+from __future__ import annotations
+
 import requests
+import pandas as pd
+from typing import Any, Dict, Optional
+
 from .auth import get_id_token
 from . import config
+from .parse import emil_json_to_df
 
 
-def _headers() -> dict:
-    """公共请求头：Bearer token + subscription key。"""
+def _headers() -> Dict[str, str]:
     return {
         "Authorization": f"Bearer {get_id_token()}",
         "Ocp-Apim-Subscription-Key": config.SUBSCRIPTION_KEY,
     }
 
 
-def get_product(emil_id: str) -> dict:
-    """拉某个 EMIL 报表的 metadata（里面有 artifacts / endpoint）。"""
-    url = f"{config.BASE_URL}/public-reports/{emil_id.lower()}"
-    resp = requests.get(url, headers=_headers(), timeout=60)
+def get_report_json(
+    path: str, params: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    调用 JSON 报表 endpoint。
+    path 形如: "/public-reports/np3-911-er/2d_agg_as_offers_ecrsm"
+    """
+    url = f"{config.BASE_URL}{path}"  # BASE_URL = "https://api.ercot.com/api"
+    resp = requests.get(url, headers=_headers(), params=params or {}, timeout=60)
     resp.raise_for_status()
     return resp.json()
 
 
-def get_artifact_endpoint(product_json: dict, index: int = 0) -> str:
+def get_report_df(path: str, params: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
     """
-    从产品 JSON 里找到下载地址 endpoint。
-    一般 artifacts[0] 就是我们要的。
+    直接返回 DataFrame。
     """
-    artifacts = product_json.get("artifacts")
-    if not artifacts:
-        embedded = product_json.get("_embedded", {})
-        products = embedded.get("products", [])
-        if products:
-            artifacts = products[0].get("artifacts")
-
-    if not artifacts:
-        raise ValueError("No artifacts found in product JSON")
-
-    return artifacts[index]["_links"]["endpoint"]["href"]
-
-
-def download_artifact_by_emil(
-    emil_id: str,
-    params: dict | None = None,
-    artifact_index: int = 0,
-) -> bytes:
-    """
-    给一个 emil_id（比如 NP3-911-ER），返回原始文件的 bytes。
-    params 暂时可以先 None（拿最新一次）。
-    """
-    product = get_product(emil_id)
-    endpoint = get_artifact_endpoint(product, artifact_index)
-    resp = requests.get(endpoint, headers=_headers(), params=params, timeout=120)
-    resp.raise_for_status()
-    return resp.content
+    payload = get_report_json(path, params=params)
+    return emil_json_to_df(payload)

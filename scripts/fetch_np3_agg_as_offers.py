@@ -59,7 +59,7 @@ def main() -> None:
         df.to_csv(args.output, index=False)
         print(f"Saved {len(df)} rows to {args.output}")
     else:
-        # 直接打印前几行
+        # just print first few rows to show example
         print(df.head())
         print(f"Total rows: {len(df)}")
 

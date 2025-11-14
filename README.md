@@ -3,6 +3,8 @@
 Small reusable Python client + scripts for pulling ERCOT EMIL reports via the Public API.
 Current focus: `NP3-911-ER` 2-Day Aggregated AS Offers (`2d_agg_as_offers_ecrsm`).
 
+This project has been tested with **Python 3.10+**.
+
 ## 1. Setup
 
 ```bash
@@ -15,8 +17,8 @@ pip install -r requirements.txt
 
 ## 2. Set up config
 
-make a copy of .env.exmaple and save as .env
-fill in required keys in the .env, which requires your own registration from ERCOT
+make a copy of `.env.exmaple` and save as `.env`
+fill in required keys in the `.env`, which requires your own registration from ERCOT
 
 ## 3. Mvp run
 

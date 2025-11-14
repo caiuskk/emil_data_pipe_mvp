@@ -13,6 +13,13 @@ source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## 2. Mvp run
+
+```bash
+python -m tests.test_token # test if your keys ready
+python -m scripts.fetch_np3_agg_as_offers --from-date 2025-01-01 --to-date 2025-01-02 -o out/offers_20250101_02.csv # simple test, saved as csv for furture connecting to Palentier usage
+```
+
 ## Mermaid notes
 
 flowchart TD

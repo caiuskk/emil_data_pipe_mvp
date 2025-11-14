@@ -1,2 +1,12 @@
 venv/
 .env
+
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+
+# Local artifacts / outputs
+out/
+
+# macOS finder
+.DS_Store
